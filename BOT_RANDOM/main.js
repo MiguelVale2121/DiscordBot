@@ -2,7 +2,9 @@ const Discord = require('discord.js');
 
 require('dotenv').config();
 
-const apiKey = process.env.Discord_token;
+const discord_token = process.env.Discord_token;
+const client_id = process.env.Client_ID;
+const API_KEY_giphy = process.env.API_KEY_giphy;
 
 const { Client, Intents, MessageAttachment } = require('discord.js');
 const client = new Client({ 
@@ -30,14 +32,14 @@ client.on('message', message => {
         if(command ==='image'){
             axios.get('https://api.unsplash.com/photos/random', {
                 headers: {
-                    'Authorization': `Client-ID 4ptGaKh5p4EW-1ioSY5TEiPhXJ8xAWprfCWd9GM2VKw` 
+                    'Authorization': `Client-ID ${client_id}` 
                 }
             }).then(({ data }) => {
                 message.channel.send(data.urls.regular);
             })
         }
         else if(command ==='gif'){
-            axios.get('https://api.giphy.com/v1/gifs/random?api_key=SQIQE9DEW6ouMeM9jx2FPTPFroObBFaW')
+            axios.get(`https://api.giphy.com/v1/gifs/random?api_key=${API_KEY_giphy}`)
             .then(({ data }) => {
                 message.channel.send(data.data.url);
             })
@@ -51,7 +53,7 @@ client.on('message', message => {
         if(command ==='image'){
             axios.get('https://api.unsplash.com/photos/random/?query='+ description, {
                 headers: {
-                    'Authorization': `Client-ID 4ptGaKh5p4EW-1ioSY5TEiPhXJ8xAWprfCWd9GM2VKw` 
+                    'Authorization': `Client-ID ${client_id}` 
                 }
             }).then(({ data }) => {
                 
@@ -59,7 +61,7 @@ client.on('message', message => {
             }).catch(()=>message.channel.send('Erro tente outra categoria'))
         }
         else if(command ==='gif'){
-            axios.get('https://api.giphy.com/v1/gifs/random?api_key=SQIQE9DEW6ouMeM9jx2FPTPFroObBFaW&tag='+ description)
+            axios.get(`https://api.giphy.com/v1/gifs/random?api_key=${API_KEY_giphy}&tag=`+ description)
             .then(({ data }) => {
                 console.log(data.data.length)
                 if (data.data.length == 0){
@@ -74,4 +76,4 @@ client.on('message', message => {
     
 });
 
-client.login(`API Key: ${apiKey}`);
+client.login(`Discord Token: ${discord_token}`);
